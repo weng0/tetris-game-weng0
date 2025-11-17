@@ -61,6 +61,12 @@ class TetrisGame:
             if key == ord('q'):
                 break
 
+            if self.interface.if_gameover(self.feste_clusters):
+                stdscr.clear()
+                self.interface.print_gameover(stdscr, curses)
+                stdscr.getch()
+                break
+
             if key == ord('r'):
                 rotation_count += 1
                 if rotation_count > 3:
