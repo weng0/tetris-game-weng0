@@ -161,3 +161,11 @@ class ClusterFest:
                 k.set_y(y)
         #print(self.alle_kloetze)
         self.kompleteReihen += deleted_zeile
+
+    def pruef_ob_max_Hoehe(self):
+        max_Hoehe = False
+        for k in self.alle_kloetze:
+            if k.get_y() == 0:
+                max_Hoehe = True
+                break
+        return max_Hoehe
