@@ -64,6 +64,6 @@ Passt ein Block nicht in die Lücke, kann man ihn rotieren, bis er die richtige 
 Will man das Spiel verlassen, so drückt man die Taste 'q'.
 
 ## Kommende Updates
-- Einbezug von Gameover, wenn die Blöcke über dem Spielrand hinausragen
-- 90° Rotationen bei einigen Blöcken möglich machen
-- Beheben von Fehlern
+- Einbezug von Gameover, wenn die Blöcke über dem Spielrand hinausragen (erledigt am 18.11)
+- 90° Rotationen bei einigen Blöcken möglich machen (erledigt am 17.11)
+- Clean coding
