@@ -44,7 +44,7 @@ class TetrisGame:
             self.wand_R.draw_Rechts(stdscr.addstr, '|')
             self.interface.print_Interface(stdscr)
 
-            self.cluster.waehleForm(Formen(self.zufallsform), isRotated)
+            rotation_count = self.cluster.waehleForm(Formen(self.zufallsform), isRotated, rotation_count)
             self.cluster.setForm()
             self.cluster.drawCluster(stdscr)
 
@@ -63,8 +63,10 @@ class TetrisGame:
 
             if key == ord('r'):
                 rotation_count += 1
-                if rotation_count % 2 == 0:
+                if rotation_count > 3:
+                    rotation_count = 0
                     isRotated = False
+                    self.cluster.setForm()
                 else:
                     isRotated = True
                     self.cluster.setForm()
@@ -96,6 +98,8 @@ class TetrisGame:
                 self.zufallsform = random.randint(1,5)
                 y, x = self.y_start, self.x_start # draw Koordinaten
                 self.cluster = Cluster(y, x)
+                rotation_count = 0
+                isRotated = False
                 
                 if len(self.feste_clusters.unbewegbare_clusters) > 0 :
                     self.feste_clusters.anordnung()
