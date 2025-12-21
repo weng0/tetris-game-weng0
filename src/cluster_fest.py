@@ -124,21 +124,20 @@ class ClusterFest:
         #self.anordnung()
 
         deleted_zeile = 0
-        # verschiebung = 0
+        
         merke = []
         y = 0
         for zeile in self.koordinaten:
             align = 0
             for k in self.alle_kloetze:
                 if k.get_y() == y:
-                    # print('Element in Zeile','y:',k.get_y(),'x:', k.get_x())
+                    
                     align += 1
                 if align == self.x_schritte:
                     merke = self.zeile_merken(y)
-                    # print('Zeilen gemerkt',merke) # Test 
-            # print('Align Elemente',align)  # Test 
+                    
             y += 2
-            # for koord in zeile: pass
+            
             
         # gemerkte Zeilen löschen
         y_2te = 0
