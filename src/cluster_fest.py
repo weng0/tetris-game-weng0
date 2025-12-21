@@ -126,40 +126,35 @@ class ClusterFest:
         deleted_zeile = 0
         
         merke = []
-        y = 0
+        #y = 0
         for zeile in self.koordinaten:
-            align = 0
-            for k in self.alle_kloetze:
-                if k.get_y() == y:
-                    
-                    align += 1
-                if align == self.x_schritte:
-                    merke = self.zeile_merken(y)
-                    
-            y += 2
+            line = []
+            for pos in zeile:
+                y,x = pos
+                for k in self.alle_kloetze:
+                    if k.get_y() == y and k.get_x() == x:
+                        line.append(pos)
+            if len(line) != self.x_schritte:
+                del line[0:]
+            merke.append(line)
             
-            
-        # gemerkte Zeilen löschen
-        y_2te = 0
-        for zeile in self.koordinaten:
-            # print('y_2te:', y_2te, 'Zeile_list:',zeile) # Test
-            if y_2te in merke:
-                k = len(self.alle_kloetze)-1
-                while k >= 0:
-                    klotz = self.alle_kloetze[k]
-                    #for k in self.alle_kloetze:
-                    if klotz.get_y() == y_2te:
-                        del self.alle_kloetze[k]
-                    k-= 1
-                deleted_zeile += 1
-            y_2te += 2
+        for zeile in merke:
+            y = 0 # default
+            for pos in zeile:
+                y,x = pos
+                index = 0
+                for k in self.alle_kloetze:
+                    if k.get_y() == y and k.get_x() == x:
+                        del self.alle_kloetze[index]
+                        break
+                    index+=1
 
-        for k in self.alle_kloetze:
-            if boden.check_ifCollide_Boden(k.getUnterseite()) == False:
-                y = k.get_y() + deleted_zeile*2
-                k.set_y(y)
-        #print(self.alle_kloetze)
-        self.kompleteReihen += deleted_zeile
+            for k in self.alle_kloetze:
+                if k.get_y() < y:
+                    y_k = k.get_y()+2
+                    k.set_y(y_k)
+
+            deleted_zeile+=1
 
     def pruef_ob_max_Hoehe(self):
         max_Hoehe = False
