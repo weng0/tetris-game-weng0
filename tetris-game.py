@@ -17,7 +17,7 @@ stdscr = curses.initscr()
 class TetrisGame:
     def __init__(self):
         self.x_start = 37 # Startpunkt
-        self.y_start = 6 # Startpunkt statt 0
+        self.y_start = 0 # Startpunkt statt 0
         self.screen_width = 52 # screen_width (max 120) original: 119
         self.screen_height = 30 # screen_height (max 30)
         self.boden = Boden(self.screen_width, self.screen_height, 0)
