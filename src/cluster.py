@@ -1,4 +1,4 @@
-from src.klotz import Klotz
+from src.klotz import Block
 import random
 random.seed()
 
@@ -12,7 +12,7 @@ class Formen(enum.Enum):
 
 class Cluster:
     def __init__(self, y, x):
-        self.klotz_cluster = [Klotz(),Klotz(),Klotz(),Klotz()]
+        self.klotz_cluster = [Block(),Block(),Block(),Block()]
         self.y = y
         self.x = x
         self.form = None
