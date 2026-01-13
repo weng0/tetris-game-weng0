@@ -36,6 +36,6 @@ class Block:
         return self.y_pos, self.x_pos
     
     def draw(self, stdscr_fn):
-        for zeilennummr in range(len(self.zeilen)):
-            zeile = self.rows[zeilennummr]
-            stdscr_fn.addstr(self.y_pos+zeilennummr, self.x_pos, zeile)
+        for zeilennummer in range(len(self.zeilen)):
+            zeile = self.rows[zeilennummer]
+            stdscr_fn.addstr(self.y_pos+zeilennummer, self.x_pos, zeile)
