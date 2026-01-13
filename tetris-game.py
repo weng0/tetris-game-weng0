@@ -63,7 +63,7 @@ class TetrisGame:
 
             if self.interface.if_gameover(self.feste_clusters):
                 stdscr.clear()
-                self.interface.print_gameover(stdscr, curses)
+                self.interface.print_gameover(stdscr) #curses
                 stdscr.getch()
                 break
 
