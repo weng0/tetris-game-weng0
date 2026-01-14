@@ -2,30 +2,30 @@ from src.cluster import TetrisBlock
 from src.klotz import Block
 from src.tetris_rand import Boden
 
-class ClusterFest:
-    def __init__(self, screen_height, screen_width):
-        self.unbewegbare_clusters : TetrisBlock = [] # Cluster
-        self.screen_height = screen_height
-        self.screen_width = screen_width
-        self.y_schritte = int(screen_height/2)
-        self.x_schritte = int((screen_width-1)/3)
+class Tetrismauer: #  ClusterFest
+    def __init__(self, spielfeld_hoehe, spielfeld_breite):
+        self.immobile_t_bloecke : TetrisBlock = [] # unbewegbare_Cluster
+        self.spielfeld_hoehe = spielfeld_hoehe # screen_height
+        self.bildschirm_breite = spielfeld_breite # screen_width
+        self.y_schritte = int(spielfeld_hoehe/2)
+        self.x_schritte = int((spielfeld_breite-1)/3)
         #self.koordinatensys = None
-        self.alle_kloetze : Block = [] # Klotz,
-        self.cluster : TetrisBlock # Cluster
+        self.mauerbloecke : Block = [] # alle_kloetze
+        # self.cluster : TetrisBlock # cluster
         self.kompleteReihen = 0
         self.koordinaten = None
 
     def get_kompleteReihen(self):
         return self.kompleteReihen
 
-    def draw(self, fn_stdscr):
-        for c in self.unbewegbare_clusters:
-            c.draw_TetrisBlock(fn_stdscr) # c.draw
+    # def draw(self, fn_stdscr):
+    #     for c in self.immobile_t_bloecke:
+    #         c.draw_TetrisBlock(fn_stdscr) # c.draw
 
     def draw(self, fn_stdscr):
-        if len(self.alle_kloetze) > 0:
-            for k in self.alle_kloetze:
-                k.draw(fn_stdscr)
+        if len(self.mauerbloecke) > 0:
+            for block in self.mauerbloecke: # k
+                block.draw(fn_stdscr)
 
     # def get_Seiten(self, seite : str):
     #     oberseiten = []
@@ -39,30 +39,30 @@ class ClusterFest:
     #     return oberseiten  # = Liste mit aller Oberseiten der Klötze, die in den festsitzenden Cluster vorhanden sind
     #         # das ist [(y,x), (y,x), ...]
 
-    def kollidiert_oben(self, obj_cluster_pos_u : list):
+    def kollidiert_oben(self, obj_u_seiten : list): #  obj_cluster_pos_u
         kollidiert = False
-        o_fest_kloetze = []
-        for k in self.alle_kloetze:
-            o_fest_kloetze.append(k.get_O_Seite())
+        mauerbloecke_o_seiten = [] #  o_fest_kloetze
+        for block in self.mauerbloecke: # k
+            mauerbloecke_o_seiten.append(block.get_O_Seite())
 
-        for pos_u in obj_cluster_pos_u:
-            y_u, x_u = pos_u
-            for pos_o in o_fest_kloetze:
-                y_o, x_o = pos_o
+        for einzelne_pos_u in obj_u_seiten: # pos_u
+            y_u, x_u = einzelne_pos_u
+            for einzelne_pos_o in mauerbloecke_o_seiten: # pos_o_seite
+                y_o, x_o = einzelne_pos_o
 
                 if y_u+1 == y_o and x_u == x_o:
                     kollidiert = True
         return kollidiert
     
-    def kollidiert_seitlich(self, cluster_R_or_L : list, get_R_or_L : str): # Wenn Cluster_R -> Fest_L / Fest_R <- Cluster_L
+    def kollidiert_seitlich(self, cluster_R_or_L : list, get_R_or_L : str): # Wenn Cluster_R -> Fest_L / Fest_R <- Cluster_L # 
         kollidiert = False
         feste_seiten = []
         if get_R_or_L == 'R':
-            for k in self.alle_kloetze:
+            for k in self.mauerbloecke:
                 feste_seiten.append(k.get_R_Seite())
                 #feste_seiten = self.get_Seiten('R') # das ist [(y,x), (y,x), ...]
         if get_R_or_L == 'L':
-            for k in self.alle_kloetze:
+            for k in self.mauerbloecke:
                 feste_seiten.append(k.get_L_Seite())
             #feste_seiten = self.get_Seiten('L')
 
@@ -92,10 +92,10 @@ class ClusterFest:
         self.koordinaten = screen_blocks
         
     def anordnung(self):
-        for ucluster in self.unbewegbare_clusters:
+        for ucluster in self.immobile_t_bloecke:
             for k in ucluster.get_Bloecke(): #  get_Kloetze
-                self.alle_kloetze.append(k)
-        del self.unbewegbare_clusters[0:]
+                self.mauerbloecke.append(k)
+        del self.immobile_t_bloecke[0:]
         #print('Alle_kloetze:', self.alle_kloetze)
         #print('Unbewegbare Cluster:', self.unbewegbare_clusters)
 
@@ -105,14 +105,14 @@ class ClusterFest:
         for zeile in self.koordinaten:
             for koord in zeile:
                 y,x = koord
-                for k in self.alle_kloetze : # geändert
+                for k in self.mauerbloecke : # geändert
                     if y == k.get_y() and x == k.get_x():
                         angeordnet.append(k)
                         #,ko = k.get_y(),k.get_x() # Test
                         #,koo.append(ko)  # Test
-        del self.alle_kloetze[0:] # geändert
+        del self.mauerbloecke[0:] # geändert
         # print(koo) # Test
-        self.alle_kloetze += angeordnet.copy()
+        self.mauerbloecke += angeordnet.copy()
         #print(self.alle_kloetze) # Test
 
     def zeile_merken(self, zeile : int):
@@ -131,7 +131,7 @@ class ClusterFest:
             line = []
             for pos in zeile:
                 y,x = pos
-                for k in self.alle_kloetze:
+                for k in self.mauerbloecke:
                     if k.get_y() == y and k.get_x() == x:
                         line.append(pos)
             if len(line) != self.x_schritte:
@@ -143,13 +143,13 @@ class ClusterFest:
             for pos in zeile:
                 y,x = pos
                 index = 0
-                for k in self.alle_kloetze:
+                for k in self.mauerbloecke:
                     if k.get_y() == y and k.get_x() == x:
-                        del self.alle_kloetze[index]
+                        del self.mauerbloecke[index]
                         break
                     index+=1
 
-            for k in self.alle_kloetze:
+            for k in self.mauerbloecke:
                 if k.get_y() < y:
                     y_k = k.get_y()+2
                     k.set_y(y_k)
@@ -158,7 +158,7 @@ class ClusterFest:
 
     def pruef_ob_max_Hoehe(self):
         max_Hoehe = False
-        for k in self.alle_kloetze:
+        for k in self.mauerbloecke:
             if k.get_y() == 0:
                 max_Hoehe = True
                 break
