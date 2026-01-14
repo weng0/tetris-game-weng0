@@ -1,17 +1,17 @@
-from src.cluster import Cluster
-from src.klotz import Klotz
+from src.cluster import TetrisBlock
+from src.klotz import Block
 from src.tetris_rand import Boden
 
 class ClusterFest:
     def __init__(self, screen_height, screen_width):
-        self.unbewegbare_clusters : Cluster = []
+        self.unbewegbare_clusters : TetrisBlock = [] # Cluster
         self.screen_height = screen_height
         self.screen_width = screen_width
         self.y_schritte = int(screen_height/2)
         self.x_schritte = int((screen_width-1)/3)
         #self.koordinatensys = None
-        self.alle_kloetze : Klotz = []
-        self.cluster : Cluster
+        self.alle_kloetze : Block = [] # Klotz,
+        self.cluster : TetrisBlock # Cluster
         self.kompleteReihen = 0
         self.koordinaten = None
 
@@ -20,7 +20,7 @@ class ClusterFest:
 
     def draw(self, fn_stdscr):
         for c in self.unbewegbare_clusters:
-            c.drawCluster(fn_stdscr)
+            c.draw_TetrisBlock(fn_stdscr) # c.draw
 
     def draw(self, fn_stdscr):
         if len(self.alle_kloetze) > 0:
@@ -93,7 +93,7 @@ class ClusterFest:
         
     def anordnung(self):
         for ucluster in self.unbewegbare_clusters:
-            for k in ucluster.get_Kloetze():
+            for k in ucluster.get_Bloecke(): #  get_Kloetze
                 self.alle_kloetze.append(k)
         del self.unbewegbare_clusters[0:]
         #print('Alle_kloetze:', self.alle_kloetze)
