@@ -17,13 +17,13 @@ class TetrisBlock:
         self.x = x
         self.form = None
 
-    def get_Block(self): # get_Kloetze
+    def get_Bloecke(self): # get_Kloetze # get_Block
         return self.bloecke # self.klotz_cluster
     
     def set_TetrisBlock(self, neue_bloecke): # set_Cluster, kloetz_liste
         self.bloecke = neue_bloecke # self.klotz_cluster
 
-    def waehle_form(self, form_auswahl : Formen, ist_rotiert, anzahl_rotationen): # waehl_form, isRotiert, rotation_anzahl, waehle_Form
+    def waehle_form(self, form_auswahl : Formen, ist_rotiert, anzahl_rotationen): # waehl_Form, isRotiert, rotation_anzahl, waehle_Form
         y = self.y
         x = self.x
         if form_auswahl == Formen.Z:
