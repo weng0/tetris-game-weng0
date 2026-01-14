@@ -10,75 +10,75 @@ class Formen(enum.Enum):
     T = 4
     O = 5
 
-class Cluster:
+class TetrisBlock:
     def __init__(self, y, x):
-        self.klotz_cluster = [Block(),Block(),Block(),Block()]
+        self.bloecke = [Block(),Block(),Block(),Block()] #self.klotz_cluster
         self.y = y
         self.x = x
         self.form = None
 
-    def get_Kloetze(self):
-        return self.klotz_cluster
+    def get_Block(self): # get_Kloetze
+        return self.bloecke # self.klotz_cluster
     
-    def set_Cluster(self, kloetz_liste):
-        self.klotz_cluster = kloetz_liste
+    def set_TetrisBlock(self, neue_bloecke): # set_Cluster, kloetz_liste
+        self.bloecke = neue_bloecke # self.klotz_cluster
 
-    def waehleForm(self, waehl_form : Formen, isRotiert, rotation_anzahl):
+    def waehle_form(self, form_auswahl : Formen, ist_rotiert, anzahl_rotationen): # waehl_form, isRotiert, rotation_anzahl, waehle_Form
         y = self.y
         x = self.x
-        if waehl_form == Formen.Z:
+        if form_auswahl == Formen.Z:
             z = [(x,y),(x+3,y),(x+3,y+2), (x+(3)*2, y+2)]
             self.form = z
-        if waehl_form == Formen.I:
+        if form_auswahl == Formen.I:
             i = [(x,y), (x,y+2), (x,y+2*2), (x,y+2*3)]
             self.form = i
-        if waehl_form == Formen.L:
+        if form_auswahl == Formen.L:
             l = [(x,y), (x,y+2), (x,y+2*2), (x+3,y+2*2)]
             self.form = l
-        if waehl_form == Formen.O:
+        if form_auswahl == Formen.O:
             o = [(x,y), (x+3, y), (x,y+2), (x+3, y+2)]
             self.form = o
-        if waehl_form == Formen.T:
+        if form_auswahl == Formen.T:
             t = [(x,y), (x-3,y+2), (x,y+2), (x+3, y+2)]
             self.form = t
-        if isRotiert == True:
-            rotation_anzahl = self.rotieren(waehl_form, rotation_anzahl)
-        return rotation_anzahl
+        if ist_rotiert == True:
+            anzahl_rotationen = self.rotieren(form_auswahl, anzahl_rotationen)
+        return anzahl_rotationen
 
-    def setForm(self):
-        for i in range(len(self.klotz_cluster)):
-            k = self.klotz_cluster[i]
-            x, y = self.form[i] # !!!
-            k.setPosition(y,x)
+    def set_form(self): #setForm
+        for blockindx in range(len(self.bloecke)): # self.klotz_cluster, i
+            block = self.bloecke[blockindx] # k , self.klotz_cluster[i]
+            x, y = self.form[blockindx]
+            block.set_pos(y,x) #  setPosition
 
-    def drawCluster(self, stdscr_fn):
-        for i in self.klotz_cluster:
-            i.draw(stdscr_fn)
+    def draw_TetrisBlock(self, stdscr_fn): # drawCluster
+        for block in self.bloecke:  # self.klotz_cluster, i
+            block.draw(stdscr_fn)
 
-    def get_Seite(self, richtung : str): # von allen Klötzen im Cluster // Richtung = z.B. 'R', 'L', 'U'
-        x_or_y_pos = []
-        for i in self.klotz_cluster:
+    def get_Seite(self, richtung : str): # von allen Klötzen im Cluster // Richtung = z.B. 'R', 'L', 'U', 'O'
+        x_oder_y_pos = [] # 
+        for block in self.bloecke: # i, self.klotz_cluster
             if richtung == 'R':
-                x_or_y_pos.append(i.get_R_Seite())
+                x_oder_y_pos.append(block.get_R_Seite())
             if richtung == 'L':
-                x_or_y_pos.append(i.get_L_Seite())
+                x_oder_y_pos.append(block.get_L_Seite())
             if richtung == 'U':
-                x_or_y_pos.append(i.getUnterseite()) # das ist [(y,x), (y,x), ...]
+                x_oder_y_pos.append(block.get_U_Seite()) # das ist [(y,x), (y,x), ...] # get_Unterseite
             if richtung == 'O':
-                x_or_y_pos.append(i.get_O_Seite())  # das ist [(y,x), (y,x), ...]
-        return x_or_y_pos
+                x_oder_y_pos.append(block.get_O_Seite())  # das ist [(y,x), (y,x), ...]
+        return x_oder_y_pos
 
-    def setPos(self, y, x):
+    def set_pos(self, y, x): # setPos
         self.y = y
         self.x = x
 
     def kollidiert_m_Cluster(self): pass
 
-    def rotieren(self, waehl_form : Formen, rotation_anzahl):
+    def rotieren(self, form_auswahl : Formen, anzahl_rotationen): # waehl_form, rotation_anzahl
         y = self.y
         x = self.x
-        if waehl_form == Formen.T:
-            match rotation_anzahl:
+        if form_auswahl == Formen.T:
+            match anzahl_rotationen:
                 case 1:
                     t2 = [(x,y), (x-3+(2*3),y+2), (x+(1*3),y+2-(1*2)), (x+3, y+2-(2*2))]
                     self.form = t2
@@ -89,18 +89,18 @@ class Cluster:
                     t4 = [(x-1*3,y-1*2),(x-1*3,y+0),(x-1*3,y+1*2),(x,y)]
                     self.form = t4
 
-        if waehl_form == Formen.I:
+        if form_auswahl == Formen.I:
             i2 = [(x,y), (x+(1*3),y+2-(1*2)), (x+(2*3),y+2*2-(2*2)), (x+(3*3),y+2*3-(3*2))]
             self.form = i2
-            rotation_anzahl += 3
+            anzahl_rotationen += 3
 
-        if waehl_form == Formen.Z:
+        if form_auswahl == Formen.Z:
             z2 = [(x,y),(x+3-(1*3),y-(1*2)),(x+3,y+2-(2*2)), (x+3*2-(1*3), y+2-(2*3))]
             self.form = z2
-            rotation_anzahl += 3
+            anzahl_rotationen += 3
 
-        if waehl_form == Formen.L:
-            match rotation_anzahl:
+        if form_auswahl == Formen.L:
+            match anzahl_rotationen:
                 case 1:
                     l2 = [(x,y),(x+1*3,y),(x+2*3,y),(x+2*3,y-1*2)]
                     self.form = l2
@@ -111,7 +111,7 @@ class Cluster:
                     l4 = [(x,y),(x+1*3,y),(x+2*3,y),(x, y-1*2)]
                     self.form = l4
                     
-        return rotation_anzahl
+        return anzahl_rotationen
 
 
 
