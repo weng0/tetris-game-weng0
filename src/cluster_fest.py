@@ -77,30 +77,30 @@ class Tetrismauer: #  ClusterFest
                     kollidiert = True
         return kollidiert
     
-    def koordinatensystem(self):
-        screen_blocks = []
+    def gitter_erfassen(self): # koordinatensystem, 
+        bildschirm_gitter = [] #  screen_blocks
         y = 0
         for ys in range(self.y_schritte):
-            screen_blocks.append([])
+            bildschirm_gitter.append([])
             x = 1
             for xs in range(self.x_schritte):
                 pos = (y,x)
-                screen_blocks[ys].append(pos)
+                bildschirm_gitter[ys].append(pos)
                 x += 3
             #print(screen_blocks[ys])
             y += 2
-        self.koordinaten = screen_blocks
+        self.koordinaten = bildschirm_gitter
         
-    def anordnung(self):
-        for ucluster in self.immobile_t_bloecke:
-            for k in ucluster.get_Bloecke(): #  get_Kloetze
-                self.mauerbloecke.append(k)
+    def bloecke_anordnen(self): # anordnung
+        for t_block in self.immobile_t_bloecke: # ucluster
+            for block in t_block.get_Bloecke(): #  get_Kloetze , k -> block
+                self.mauerbloecke.append(block)
         del self.immobile_t_bloecke[0:]
         #print('Alle_kloetze:', self.alle_kloetze)
         #print('Unbewegbare Cluster:', self.unbewegbare_clusters)
 
         # Klötze neu anordnen
-        angeordnet = []
+        angeordnet = [] # 
         # koo = [] # Test
         for zeile in self.koordinaten:
             for koord in zeile:
@@ -120,10 +120,10 @@ class Tetrismauer: #  ClusterFest
         gemerkt.append(zeile)
         return gemerkt
 
-    def zeile_Loeschen(self, boden : Boden):
+    def zeile_loeschen(self, boden : Boden): # zeile_Loeschen
         #self.anordnung()
 
-        deleted_zeile = 0
+        del_zeilen = 0 # deleted_zeilen, Anzahl gelöschte Zeilen
         
         merke = []
         #y = 0
@@ -154,12 +154,12 @@ class Tetrismauer: #  ClusterFest
                     y_k = k.get_y()+2
                     k.set_y(y_k)
 
-            deleted_zeile+=1
+            del_zeilen+=1
 
-    def pruef_ob_max_Hoehe(self):
-        max_Hoehe = False
+    def pruef_max_hoehe(self): # pruef_ob_max_Hoehe
+        max_hoehe = False
         for k in self.mauerbloecke:
             if k.get_y() == 0:
-                max_Hoehe = True
+                max_hoehe = True
                 break
-        return max_Hoehe
+        return max_hoehe
