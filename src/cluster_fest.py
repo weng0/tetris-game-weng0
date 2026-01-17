@@ -39,41 +39,41 @@ class Tetrismauer: #  ClusterFest
     #     return oberseiten  # = Liste mit aller Oberseiten der Klötze, die in den festsitzenden Cluster vorhanden sind
     #         # das ist [(y,x), (y,x), ...]
 
-    def kollidiert_oben(self, obj_u_seiten : list): #  obj_cluster_pos_u
+    def kollidiert_oben(self, obj_u_seiten : list): #  obj_cluster_pos_u # da kommt funktion rein
         kollidiert = False
         mauerbloecke_o_seiten = [] #  o_fest_kloetze
-        for block in self.mauerbloecke: # k
-            mauerbloecke_o_seiten.append(block.get_O_Seite())
+        for mb in self.mauerbloecke: # k
+            mauerbloecke_o_seiten.append(mb.get_O_Seite())
 
-        for einzelne_pos_u in obj_u_seiten: # pos_u
-            y_u, x_u = einzelne_pos_u
-            for einzelne_pos_o in mauerbloecke_o_seiten: # pos_o_seite
-                y_o, x_o = einzelne_pos_o
+        for obj_pos_u in obj_u_seiten: # pos_u
+            y_u, x_u = obj_pos_u
+            for mb_pos_o in mauerbloecke_o_seiten: # pos_o_seite
+                mb_y_o, mb_x_o = mb_pos_o
 
-                if y_u+1 == y_o and x_u == x_o:
+                if y_u+1 == mb_y_o and x_u == mb_x_o:
                     kollidiert = True
         return kollidiert
     
-    def kollidiert_seitlich(self, cluster_R_or_L : list, get_R_or_L : str): # Wenn Cluster_R -> Fest_L / Fest_R <- Cluster_L # 
+    def kollidiert_seitlich(self, obj_R_oder_L_seiten : list, waehle_R_oder_L : str): # Wenn Cluster_R -> Fest_L / Fest_R <- Cluster_L #  cluster_R_or_L, get_R_or_L
         kollidiert = False
-        feste_seiten = []
-        if get_R_or_L == 'R':
-            for k in self.mauerbloecke:
-                feste_seiten.append(k.get_R_Seite())
+        mauerbloecke_seiten = [] # feste_seiten
+        if waehle_R_oder_L == 'R':
+            for mb in self.mauerbloecke:
+                mauerbloecke_seiten.append(mb.get_R_Seite())
                 #feste_seiten = self.get_Seiten('R') # das ist [(y,x), (y,x), ...]
-        if get_R_or_L == 'L':
-            for k in self.mauerbloecke:
-                feste_seiten.append(k.get_L_Seite())
+        if waehle_R_oder_L == 'L':
+            for mb in self.mauerbloecke: # k
+                mauerbloecke_seiten.append(mb.get_L_Seite())
             #feste_seiten = self.get_Seiten('L')
 
-        for cluster_pos in cluster_R_or_L:
-            cluster_y, cluster_x = cluster_pos
-            for pos_fest in feste_seiten:
-                y_fest, x_fest = pos_fest
+        for obj_pos_seite in obj_R_oder_L_seiten: # cluster_pos
+            obj_y_seite, obj_x_seite = obj_pos_seite # ,  cluster_y, cluster_x
+            for mb_pos_seite in mauerbloecke_seiten: # pos_fest
+                mb_y_seite, mb_x_seite = mb_pos_seite # pos_... oder ..._pos Namensgebung????????? pos_fest, y_fest-> m_block_seite_y, x_fest-> m_block_seite_x
 
-                if cluster_y == y_fest and x_fest == cluster_x-1: # Fest_R <- Cluster_L
+                if obj_y_seite == mb_y_seite and mb_x_seite == obj_x_seite-1: # Fest_R <- Cluster_L
                     kollidiert = True
-                if cluster_y == y_fest and cluster_x+1 == x_fest: # Cluster_R -> Fest_L
+                if obj_y_seite == mb_y_seite and obj_x_seite+1 == mb_x_seite: # Cluster_R -> Fest_L
                     kollidiert = True
         return kollidiert
     
