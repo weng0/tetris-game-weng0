@@ -123,20 +123,20 @@ class Tetrismauer: #  ClusterFest
     def zeile_loeschen(self, boden : Boden): # zeile_Loeschen
         #self.anordnung()
 
-        del_zeilen = 0 # deleted_zeilen, Anzahl gelöschte Zeilen
+        geloeschte_zeilen = 0 # deleted_zeilen, Anzahl gelöschte Zeilen
         
         merke = []
         #y = 0
         for zeile in self.koordinaten:
-            line = []
+            reihe = [] # line
             for pos in zeile:
                 y,x = pos
                 for k in self.mauerbloecke:
                     if k.get_y() == y and k.get_x() == x:
-                        line.append(pos)
-            if len(line) != self.x_schritte:
-                del line[0:]
-            merke.append(line)
+                        reihe.append(pos)
+            if len(reihe) != self.x_schritte:
+                del reihe[0:]
+            merke.append(reihe)
             
         for zeile in merke:
             y = 0 # default
@@ -154,7 +154,7 @@ class Tetrismauer: #  ClusterFest
                     y_k = k.get_y()+2
                     k.set_y(y_k)
 
-            del_zeilen+=1
+            geloeschte_zeilen+=1
 
     def pruef_max_hoehe(self): # pruef_ob_max_Hoehe
         max_hoehe = False
