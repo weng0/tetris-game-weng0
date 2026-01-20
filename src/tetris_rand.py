@@ -1,8 +1,9 @@
+# Spielgrenze des Tetris-Spiels
 class Tetris_Rand:
     def __init__(self, mul, y, x):
         self.x_pos = x
         self.y_pos = y
-        self.mul = mul
+        self.mul = mul # Multiplikator
     
     def get_x(self):
         return self.x_pos
@@ -14,37 +15,37 @@ class Tetris_Rand:
         drawing = symbol * self.mul
         stdscr_fn(self.y_pos, self.x_pos, drawing)
 
+    def draw_Rechts(self, stdscr_fn, symbol):  # symbol = z.B.  "|"
+        for i in range(self.mul):
+            stdscr_fn(self.y_pos+i, self.x_pos, symbol)
+
 class Boden(Tetris_Rand):
     def __init__(self, mul, y, x):
         super().__init__(mul, y, x)
 
-    def check_ifCollide_Boden(self, pos_u):
-        collide = False
+    def pruefen_ob_boden(self, pos_u): #  check_ifCollide_Boden
+        kollidiert = False #  collide
         if isinstance(pos_u, list):
             for pos in pos_u:
                 y, x = pos
                 if y+1 == self.y_pos:
-                    collide = True
+                    kollidiert = True
         else:
             y, x = pos_u
             if y+1 == self.y_pos:
-                collide = True
-        return collide
+                kollidiert = True
+        return kollidiert
 
 class Wand(Tetris_Rand):
     def __init__(self, mul, y, x):
         super().__init__(mul, y, x)
 
-    def check_ifCollide_Wand(self, x_pos_r_or_l : list):
-        collide = False
+    def pruefen_ob_Wand(self, x_pos_r_or_l : list): #  check_ifCollide_Wand
+        kollidiert = False
         for pos in x_pos_r_or_l:
             y, x = pos
             if x+1 == self.x_pos:
-                collide = True
+                kollidiert = True
             if x-1 == self.x_pos:
-                collide = True
-        return collide
-    
-    def draw_Rechts(self, stdscr_fn, symbol):  # symbol = z.B.  "|"
-        for i in range(self.mul):
-            stdscr_fn(self.y_pos+i, self.x_pos, symbol)
+                kollidiert = True
+        return kollidiert
