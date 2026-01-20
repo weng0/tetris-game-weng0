@@ -1,4 +1,4 @@
-# Spielgrenze des Tetris-Spiels
+# Grenze des Tetris-Spielfelds
 class Tetris_Rand:
     def __init__(self, mul, y, x):
         self.x_pos = x
@@ -19,10 +19,13 @@ class Tetris_Rand:
         for i in range(self.mul):
             stdscr_fn(self.y_pos+i, self.x_pos, symbol)
 
+# Boden des Tetris-Spielfelds
 class Boden(Tetris_Rand):
     def __init__(self, mul, y, x):
         super().__init__(mul, y, x)
 
+    """Prüft, ob ein fremdes Objekt mit dem Boden kollidiert.
+    :param pos_u: Unterseite des fremden Objekts"""
     def pruefen_ob_boden(self, pos_u): #  check_ifCollide_Boden
         kollidiert = False #  collide
         if isinstance(pos_u, list):
@@ -36,10 +39,13 @@ class Boden(Tetris_Rand):
                 kollidiert = True
         return kollidiert
 
+# Linke oder rechte Grenze des Tetris-Spielfelds
 class Wand(Tetris_Rand):
     def __init__(self, mul, y, x):
         super().__init__(mul, y, x)
 
+    """Prüft, ob ein fremdes Objekt mit der Wand kollidiert.
+    :param x_pos_r_or_l: Rechte oder linke Wand des fremden Objekts """
     def pruefen_ob_Wand(self, x_pos_r_or_l : list): #  check_ifCollide_Wand
         kollidiert = False
         for pos in x_pos_r_or_l:
