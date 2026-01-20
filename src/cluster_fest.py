@@ -2,19 +2,22 @@ from src.cluster import TetrisBlock
 from src.klotz import Block
 from src.tetris_rand import Boden
 
-class Tetrismauer: #  ClusterFest
+# Der Tetrismauer ist zusammengesetzt aus mehreren Tetris-Blöcken, die der Spieler endgültig abgelegt hat und sich nicht mehr bewegen lassen.
+
+class Tetrismauer: #  ClusterFest # doch unbenennen in TetrisMauer -> tetris_mauer
     def __init__(self, spielfeld_hoehe, spielfeld_breite):
-        self.immobile_t_bloecke : TetrisBlock = [] # unbewegbare_Cluster
+        self.immobile_t_bloecke : TetrisBlock = [] # unbewegbare_Cluster # Kommentar: Abgelegte Tetris-Blöcken
         self.spielfeld_hoehe = spielfeld_hoehe # screen_height
-        self.bildschirm_breite = spielfeld_breite # screen_width
+        self.spielfeld_breite = spielfeld_breite # screen_width # self.bildschirm_breite -> self.spielfeld_breite
         self.y_schritte = int(spielfeld_hoehe/2)
         self.x_schritte = int((spielfeld_breite-1)/3)
         #self.koordinatensys = None
-        self.mauerbloecke : Block = [] # alle_kloetze
+        self.mauerbloecke : Block = [] # alle_kloetze # Kommentar: Alle Bestandteile der Tetris-Blöcke geordnet in einer Liste
         # self.cluster : TetrisBlock # cluster
-        self.kompleteReihen = 0
+        self.kompleteReihen = 0 # Kommentar: Anzahl der kompletten Reihen, die der Spieler geschaft hat
         self.koordinaten = None
 
+    # Gibt den Anzahl der aktuelle Punktzahl des Spielers zurück
     def get_kompleteReihen(self):
         return self.kompleteReihen
 
@@ -22,6 +25,7 @@ class Tetrismauer: #  ClusterFest
     #     for c in self.immobile_t_bloecke:
     #         c.draw_TetrisBlock(fn_stdscr) # c.draw
 
+    # Zeichnet die Tetrismauer auf dem Bildschirm
     def draw(self, fn_stdscr):
         if len(self.mauerbloecke) > 0:
             for block in self.mauerbloecke: # k
@@ -39,6 +43,12 @@ class Tetrismauer: #  ClusterFest
     #     return oberseiten  # = Liste mit aller Oberseiten der Klötze, die in den festsitzenden Cluster vorhanden sind
     #         # das ist [(y,x), (y,x), ...]
 
+    # Sensoren-Funktionen
+    """ Diese Funktion prüft, ob ein fremdes Objekt mit der Tetrismauer kollidiert.
+    Es gilt als kollidiert, wenn die unterste Seite des fremden Tetris-Blockes auf die Oberfläche der Mauer trifft.
+
+    :param obj_u_seiten: Die Unterseite des fremden Tetris-Blockes (Liste)
+    :return: Ob die Mauer kollidiert wurde (bool) """
     def kollidiert_oben(self, obj_u_seiten : list): #  obj_cluster_pos_u # da kommt funktion rein
         kollidiert = False
         mauerbloecke_o_seiten = [] #  o_fest_kloetze
@@ -54,6 +64,12 @@ class Tetrismauer: #  ClusterFest
                     kollidiert = True
         return kollidiert
     
+    """ Diese Funktion prüft, ob ein fremdes Objekt mit der Tetrismauer kollidiert.
+    Es gilt als kollidiert, wenn die rechte Seite des fremden Tetris-Blockes auf die linke Seite des herausragenden Mauerblockes trifft,
+    oder die linke Seite des fremden Tetris-Blockes auf die rechte Seite des herausragenden Mauerblockes trifft.
+
+    :param obj_u_seiten: Die äußerst linke oder rechte Seite des fremden Tetris-Blockes (Liste)
+    :return: Ob die Mauer kollidiert wurde (bool) """
     def kollidiert_seitlich(self, obj_R_oder_L_seiten : list, waehle_R_oder_L : str): # Wenn Cluster_R -> Fest_L / Fest_R <- Cluster_L #  cluster_R_or_L, get_R_or_L
         kollidiert = False
         mauerbloecke_seiten = [] # feste_seiten
@@ -77,6 +93,7 @@ class Tetrismauer: #  ClusterFest
                     kollidiert = True
         return kollidiert
     
+    # Erfasst die Koordinaten des Spielfeldgitters und speichert sie in einer verschachtelten Liste.
     def gitter_erfassen(self): # koordinatensystem, 
         bildschirm_gitter = [] #  screen_blocks
         y = 0
@@ -91,6 +108,7 @@ class Tetrismauer: #  ClusterFest
             y += 2
         self.koordinaten = bildschirm_gitter
         
+    # Alle Blöcke in den abgelegten Tetris-Blöcken werden im einer neue Liste erfasst und in Reihenfolge gebracht.
     def bloecke_anordnen(self): # anordnung
         for t_block in self.immobile_t_bloecke: # ucluster
             for block in t_block.get_Bloecke(): #  get_Kloetze , k -> block
@@ -115,12 +133,20 @@ class Tetrismauer: #  ClusterFest
         self.mauerbloecke += angeordnet.copy()
         #print(self.alle_kloetze) # Test
 
+    # Bestimmte Zeilen werden in einer Liste gespeichert
     def zeile_merken(self, zeile : int):
         gemerkt = []
         gemerkt.append(zeile)
         return gemerkt
 
-    def zeile_loeschen(self, boden : Boden): # zeile_Loeschen
+    """
+    In einer Schleife wird geprüft, ob sich Mauerblöcke in den einzelnen Zeilen des Spielfeldgitters befinden
+    und ob eine Reihe vollständig gefüllt ist. Bei jeder vollständigen Reihe werden zunächst die Koordinaten
+    aller Blöcke dieser Reihe in der Liste „merke“ gespeichert. Anschließend werden diese Blöcke aus der
+    Liste self.mauerbloecke entfernt. Die Reihen oberhalb der gelöschten Zeilen rücken danach
+    um eine Position nach unten.
+    """
+    def zeile_loeschen(self, boden : Boden): # zeile_Loeschen # param löschen
         #self.anordnung()
 
         geloeschte_zeilen = 0 # deleted_zeilen, Anzahl gelöschte Zeilen
@@ -131,8 +157,8 @@ class Tetrismauer: #  ClusterFest
             reihe = [] # line
             for pos in zeile:
                 y,x = pos
-                for k in self.mauerbloecke:
-                    if k.get_y() == y and k.get_x() == x:
+                for block in self.mauerbloecke: # k -> block
+                    if block.get_y() == y and block.get_x() == x:
                         reihe.append(pos)
             if len(reihe) != self.x_schritte:
                 del reihe[0:]
@@ -155,7 +181,8 @@ class Tetrismauer: #  ClusterFest
                     k.set_y(y_k)
 
             geloeschte_zeilen+=1
-
+ 
+    # Hier wird die aktuelle Höhe der Mauer ermittelt.
     def pruef_max_hoehe(self): # pruef_ob_max_Hoehe
         max_hoehe = False
         for k in self.mauerbloecke:
