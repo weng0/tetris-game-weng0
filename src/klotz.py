@@ -2,15 +2,15 @@
 # Ein Block besteht aus zwei Zeilen, je gefüllt mit 3 Rauten
 class Block:
     def __init__(self):
-        self.x_pos = 0 # x-Koordinate des obersten rechten Teil des Blockes
-        self.y_pos = 0 # y-Koordinate des obersten rechten Teil des Blockes
+        self.x_pos = 0 # x-Koordinate der obersten rechten Raute
+        self.y_pos = 0 # y-Koordinate der obersten rechten Raute
         self.zeilen = ['###','###'] # Der sichtbare Block besteht aus Rauten
 
-# Jede Zeile des Blockes hat eine Länge von 3
+# Jede Zeile des Blocks hat eine Länge von 3
     def get_zeilen_laenge(self):
         return 3
 
-# Diese Funktionen geben die Koordinaten des Blockes zurück
+# Diese Funktionen geben die Koordinaten des Blocks zurück
     def get_x(self):
         return self.x_pos
     
@@ -33,7 +33,7 @@ class Block:
     def get_O_Seite(self):
         return self.y_pos, self.x_pos
 
-# Diese Funktionen überschreiben die Koordinaten des Blockes
+# Diese Funktionen überschreiben die Koordinaten des Blocks
     def set_pos(self, y, x):
         self.y_pos = y
         self.x_pos = x
@@ -44,5 +44,5 @@ class Block:
 # Diese Funktion malt ein Block auf dem Terminalfenster
     def draw(self, stdscr_fn):
         for zeilennummer in range(len(self.zeilen)):
-            zeile = self.rows[zeilennummer]
+            zeile = self.zeilen[zeilennummer] # rows
             stdscr_fn.addstr(self.y_pos+zeilennummer, self.x_pos, zeile)
