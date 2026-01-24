@@ -27,7 +27,7 @@ class Game_Interface:
 
     # Leitet das Spielende ein, wenn Blöcke über die Höhe des Spielfelds ragen.
     def if_gameover(self,  cluster_f : Tetrismauer):
-        if cluster_f.pruef_ob_max_Hoehe():
+        if cluster_f.pruef_max_hoehe():
             return True
     
     # Gibt „Gameover“, den Punktestand und den Namen des Spielers auf dem Bildschirm aus.
