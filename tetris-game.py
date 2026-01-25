@@ -18,20 +18,19 @@ class TetrisGame:
     def __init__(self):
         self.x_start = 37 # Startpunkt
         self.y_start = 0 # Startpunkt statt 0
-        self.screen_width = 52 # screen_width (max 120) original: 119
+        self.screen_width = 52 # screen_width (max 120)
         self.screen_height = 30 # screen_height (max 30)
         self.boden = Boden(self.screen_width, self.screen_height, 0)
         self.wand_L = Wand(self.screen_height, 0, 0)
-        self.wand_R = Wand(self.screen_height, 0, self.screen_width) # 119
-        self.tetrismauer = Tetrismauer(self.screen_height, self.screen_width) # self.feste_clusters, Clusterfest
-        self.tetris_block = TetrisBlock(self.y_start, self.x_start) # self.cluster, Cluster
+        self.wand_R = Wand(self.screen_height, 0, self.screen_width)
+        self.tetrismauer = Tetrismauer(self.screen_height, self.screen_width)
+        self.tetris_block = TetrisBlock(self.y_start, self.x_start)
         self.zufallsform = Formen.T
         self.interface = Game_Interface()
 
     def main(self,stdscr):
         # Bildschirm
         stdscr.clear()
-        # screen_height, screen_width = stdscr.getmaxyx() // not used
         y, x = self.y_start, self.x_start
         isRotated = False
         rotation_count = 0
@@ -44,11 +43,10 @@ class TetrisGame:
             self.wand_R.draw_Rechts(stdscr.addstr, '|')
             self.interface.print_Interface(stdscr)
 
-            rotation_count = self.tetris_block.set_form(Formen(self.zufallsform), isRotated, rotation_count)  # waehleForm
-            # self.tetris_block.update_block_pos() # self.unbenennen
-            self.tetris_block.draw_TetrisBlock(stdscr) # self.unbenennen,   drawCluster
+            rotation_count = self.tetris_block.set_form(Formen(self.zufallsform), isRotated, rotation_count)
+            self.tetris_block.draw_TetrisBlock(stdscr)
 
-            self.tetrismauer.draw(stdscr) # self.unbenennen
+            self.tetrismauer.draw(stdscr)
 
             isBoden = self.boden.pruefen_ob_boden(self.tetris_block.get_Seite('U'))
             isFCluster = self.tetrismauer.kollidiert_oben(self.tetris_block.get_Seite('U')) # unbenennten: is_tetris_mauer
@@ -63,7 +61,7 @@ class TetrisGame:
 
             if self.interface.if_gameover(self.tetrismauer):
                 stdscr.clear()
-                self.interface.print_gameover(stdscr) #curses
+                self.interface.print_gameover(stdscr)
                 stdscr.getch()
                 break
 
@@ -72,16 +70,14 @@ class TetrisGame:
                 if rotation_count > 3:
                     rotation_count = 0
                     isRotated = False
-                    # self.tetris_block.update_block_pos()
                 else:
                     isRotated = True
-                    # self.tetris_block.update_block_pos()
 
             if key == curses.KEY_UP and y > 0:
                 y -= 2
                 self.tetris_block.set_pos(y,x)
             if key == curses.KEY_DOWN:
-                if isBoden == False and isFCluster == False: # and isFCluster_L == False
+                if isBoden == False and isFCluster == False:
                     y += 2
                     self.tetris_block.set_pos(y,x)
                 else: # Cluster haftet am Boden und kann nicht mehr bewegt werden, der Cluster wird dann von dieser Variable entfernt 
@@ -100,9 +96,9 @@ class TetrisGame:
                         self.tetris_block.set_pos(y,x)
 
             if kollidiert == True:
-                self.tetrismauer.immobile_t_bloecke.append(self.tetris_block) # !!! #  unbewegbare_clusters
+                self.tetrismauer.immobile_t_bloecke.append(self.tetris_block)
                 self.zufallsform = random.randint(1,5)
-                y, x = self.y_start, self.x_start # draw Koordinaten
+                y, x = self.y_start, self.x_start
                 self.tetris_block = TetrisBlock(y, x)
                 rotation_count = 0
                 isRotated = False
