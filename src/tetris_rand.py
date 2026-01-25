@@ -26,8 +26,8 @@ class Boden(Tetris_Rand):
 
     """Prüft, ob ein fremdes Objekt mit dem Boden kollidiert.
     :param pos_u: Unterseite des fremden Objekts"""
-    def pruefen_ob_boden(self, pos_u): #  check_ifCollide_Boden
-        kollidiert = False #  collide
+    def pruefen_ob_boden(self, pos_u):
+        kollidiert = False
         if isinstance(pos_u, list):
             for pos in pos_u:
                 y, x = pos
