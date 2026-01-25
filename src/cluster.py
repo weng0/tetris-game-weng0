@@ -2,7 +2,7 @@ from src.klotz import Block
 import random
 random.seed()
 
-# Die fünf möglichen Formen eines Tetris-Blockes
+# Die fünf möglichen Formen eines Tetris-Blocks
 import enum
 class Formen(enum.Enum):
     Z = 1
@@ -11,28 +11,28 @@ class Formen(enum.Enum):
     T = 4
     O = 5
 
-# Jeder Tetris-Block besteht aus mehreren Blöcken, die zusammen eine bestimmte Form bilden
+# Jeder Tetris-Block besteht aus mehreren Blöcken, die gemeinsam eine bestimmte Form bilden.
 class TetrisBlock:
     def __init__(self, y, x):
-        self.bloecke = [Block(),Block(),Block(),Block()] #self.klotz_cluster
+        self.bloecke = [Block(),Block(),Block(),Block()]
         self.y = y  # x-Koordinate des obersten rechten Blockes
         self.x = x # y-Koordinate des obersten rechten Blockes
         self.form = None
 
     # Getter-Funktionen
     """
-    Alle Blöcke einer Instanz der Klasse Tetris-Block werden zurückgegeben
-    return: Block (Objekt) """
-    def get_Bloecke(self): # get_Kloetze # get_Block
-        return self.bloecke # self.klotz_cluster
+    Gibt alle Blöcke einer Instanz der Klasse TetrisBlock zurück.
+    return: Liste von Block-Objekten """
+    def get_Bloecke(self):
+        return self.bloecke
     
     """
-    Diese Funktion merkt sich von jedem Block des Tetris-Blockes nur eine ausgewählte Seite.
-    param richtung: Eine ausgewählte Seite des Blockes. 'R' = Rechts, 'L' = Links, 'U' = Unten, 'O' = Oben
-    return: Eine Liste aus Koordinaten von R-, L-, U- oder O-Seiten mehrere Blöcke, wie etwa [(y,x), (y,x), ...]. """
+    Diese Funktion speichert von jedem Block des Tetris-Blocks nur eine ausgewählte Seite.
+    param richtung: Die ausgewählte Seite des Blocks; 'R' = rechts, 'L' = links, 'U' = unten, 'O' = oben
+    return: Eine Liste von Koordinaten der ausgewählten Seiten mehrerer Blöcke, z.B. links = [(y,x), (y,x), ...]. """
     def get_Seite(self, richtung : str):
-        pos_seite = [] # x_oder_y_pos
-        for block in self.bloecke: # i, self.klotz_cluster
+        pos_seite = []
+        for block in self.bloecke:
             if richtung == 'R':
                 pos_seite.append(block.get_R_Seite())
             if richtung == 'L':
@@ -45,12 +45,12 @@ class TetrisBlock:
     
     # Setter-Funktionen
 
-    # Diese Funktion ordnet einem Tetris-Block eine Liste aus neuen Blöcken zu, die möglicherweise andere Koordinaten haben.
-    def set_TetrisBlock(self, neue_bloecke : list): # set_Cluster, kloetz_liste
-        self.bloecke = neue_bloecke # self.klotz_cluster
+    # Diese Funktion ordnet einem Tetris-Block eine Liste neuer Blöcke zu, die möglicherweise andere Koordinaten besitzen.
+    def set_TetrisBlock(self, neue_bloecke : list):
+        self.bloecke = neue_bloecke
 
-    # Diese Funktion verändert die Koordinaten des Tetris-Blockes
-    def set_pos(self, y, x): # setPos
+    # Diese Funktion verändert die Koordinaten des Tetris-Blocks
+    def set_pos(self, y, x):
         self.y = y
         self.x = x
 
@@ -63,7 +63,7 @@ class TetrisBlock:
     :param anzahl_rotationen: Anzahl der bisherigen Rotationen (int)
     :return: Aktuelle Anzahl der Rotationen (int)
     """
-    def set_form(self, form_auswahl : Formen, ist_rotiert, anzahl_rotationen): # vorher: waehle_form # original: waehl_Form, isRotiert, rotation_anzahl, waehle_Form # nenne es lieber set_form()
+    def set_form(self, form_auswahl : Formen, ist_rotiert, anzahl_rotationen):
         y = self.y
         x = self.x
         if form_auswahl == Formen.Z:
@@ -84,25 +84,25 @@ class TetrisBlock:
 
         if ist_rotiert == True:
             anzahl_rotationen = self.rotieren(form_auswahl, anzahl_rotationen)
-        self.__update_block_pos() # privat machen
+        self.__update_block_pos()
         return anzahl_rotationen
 
-    # Nachdem für den Tetris-Block ein Form bekommt, müssen die Koordinaten der einzelne Blöcke im Tetris-Block angepasst werden.
-    def __update_block_pos(self): # vorher: set_form # original: setForm # nenne es lieber update_block_pos #
-        for blockindx in range(len(self.bloecke)): # self.klotz_cluster, i
-            block = self.bloecke[blockindx] # k , self.klotz_cluster[i]
+    # Nachdem der Tetris-Block eine Form erhalten hat, müssen die Koordinaten der einzelnen Blöcke im Tetris-Block angepasst werden.
+    def __update_block_pos(self):
+        for blockindx in range(len(self.bloecke)):
+            block = self.bloecke[blockindx]
             x, y = self.form[blockindx]
-            block.set_pos(y,x) #  setPosition
+            block.set_pos(y,x)
 
     # Zeichnet einen Tetris-Block auf dem Bildschirm
-    def draw_TetrisBlock(self, stdscr_fn): # drawCluster
-        for block in self.bloecke:  # self.klotz_cluster, i
+    def draw_TetrisBlock(self, stdscr_fn):
+        for block in self.bloecke:
             block.draw(stdscr_fn)
 
     """
     Passt die Form des Tetris-Blockes nach einer Rotation erneuert an.
     return: Aktuelle Anzahl der Rotationen """
-    def rotieren(self, form_auswahl : Formen, anzahl_rotationen): # waehl_form, rotation_anzahl
+    def rotieren(self, form_auswahl : Formen, anzahl_rotationen):
         y = self.y
         x = self.x
         if form_auswahl == Formen.T:
@@ -139,7 +139,7 @@ class TetrisBlock:
                     l4 = [(x,y),(x+1*3,y),(x+2*3,y),(x, y-1*2)]
                     self.form = l4
 
-        self.__update_block_pos() # bitte privat machen
+        self.__update_block_pos()
         return anzahl_rotationen
 
 
